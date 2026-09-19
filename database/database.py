@@ -34,6 +34,9 @@ def buscar_funcionario(matricula):
 
     funcionario = resultado.fetchone()
 
+    if funcionario is None:
+        raise ValueError("funcionario não encontrado")
+
     return funcionario
 
 

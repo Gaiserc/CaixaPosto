@@ -10,23 +10,25 @@ from database.database import conexao, salvar_funcionario, listar_funcionarios, 
 print(listar_funcionarios())
 
 
-###nome = input("Qual o seu nome: ")
-###idade = int(input("Qual a sua idade: "))
-matricula = int(input("Qual a sua matricula: "))
-funcionario_dados = buscar_funcionario(matricula)
 
-funcionario = Funcionario(
-    funcionario_dados[1],
-    funcionario_dados[2],
-    funcionario_dados[3],
-)
+while True:
+    matricula_escolhida = int(input("Digite a matricula do funcionario: "))
+    try:
+        funcionario_dados = buscar_funcionario(matricula_escolhida)
 
-print(funcionario.nome)
-print(funcionario.idade)
-print(funcionario.matricula)
+        funcionario = Funcionario(
+            funcionario_dados[1],
+            funcionario_dados[2],
+            funcionario_dados[3],
+        )
 
-###funcionario = Funcionario(nome, idade, matricula)
-###salvar_funcionario(funcionario)
+        print(funcionario.nome)
+        print(funcionario.idade)
+        print(funcionario.matricula)
+        break
+    except ValueError as erro:
+        print(erro)
+
 
 """
 # adicionando combustivel
