@@ -6,6 +6,7 @@ from models.turno import Turno
 
 from database.database import conexao, salvar_funcionario, listar_funcionarios, buscar_funcionario
 
+
 # registrando funcionario
 print(listar_funcionarios())
 
@@ -30,7 +31,7 @@ while True:
         print(erro)
 
 
-"""
+
 # adicionando combustivel
 combustivel1 = Combustivel("Etanol", 4.78)
 combustivel2 = Combustivel("Aditivada", 6.69)
@@ -85,9 +86,11 @@ def iniciar_turno():
             input(f"Digite o encerrante inicial do bico {bico.numero}: ")
         )
         registro = Registro_bico_turno(
-            bico,
+            bico.numero,
             encerrante,
-            bico.combustivel.preco_atual
+            bico.combustivel.preco_atual,
+            funcionario.matricula,
+            bico.combustivel.nome
         )
 
         turno.add_registro_bico(registro)
@@ -97,10 +100,13 @@ def iniciar_turno():
         )
 
         registro.registrar_encerrante_final(encerrante_final)
+
+        # salva o registro completo no banco de dados
+        registro.salvar_no_banco(conexao)
+
 iniciar_turno()
 
 
 turno.mostrar_registros()
 turno.resumo_turno()
 turno.resumo_financeiro()
-"""

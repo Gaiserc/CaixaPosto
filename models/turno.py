@@ -11,7 +11,7 @@ class Turno:
 
         for bico_existente in self.registros_bicos:
 
-            if registro.bico.numero == bico_existente.bico.numero:
+            if registro.bico.numero == bico_existente.bico:
                 encontrou = True
                 print("esse bico ja existe")
 
@@ -21,7 +21,7 @@ class Turno:
     def mostrar_registros(self):
 
         for registro in self.registros_bicos:
-            print(f"Bico {registro.bico.numero} | Inicial: {registro.encerrante_inicial} | Final: {registro.encerrante_final} | Venda:  {registro.calcular_venda()}")
+            print(f"Bico {registro.bico} | Inicial: {registro.encerrante_inicial} | Final: {registro.encerrante_final} | Venda:  {registro.calcular_venda()}")
 
     def resumo_turno(self):
         total = 0

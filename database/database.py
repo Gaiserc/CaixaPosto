@@ -11,6 +11,24 @@ conexao.execute("""
 
 conexao.commit()
 
+conexao.execute("""
+    CREATE TABLE IF NOT EXISTS registros_vendas (
+    id INTEGER PRIMARY KEY,
+    funcionario_id INTEGER,
+    bico INTEGER,
+    combustivel TEXT,
+    encerrante_inicial REAL,
+    encerrante_final REAL,
+    litros_vendidos REAL,
+    preco_praticado REAL,
+    valor_venda REAL,
+    data_registro DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(funcionario_id) REFERENCES funcionarios(id)
+    )
+    """)
+
+conexao.commit()
+
 def salvar_funcionario(funcionario):
     conexao.execute("""
     INSERT INTO funcionarios (nome, idade, matricula) 
