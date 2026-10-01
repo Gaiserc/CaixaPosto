@@ -34,3 +34,23 @@ class Turno:
         for registro in self.registros_bicos:
             total += registro.valor_da_venda()
         print(f"Total de vendas: R$ {total:.2f}")
+
+    def abrir_turno_banco(self, conexao):
+        # Os pontos de interrogação (?) são os "placeholders" seguros do SQLite
+        cursor = conexao.execute("""
+            INSERT INTO turnos (funcionario_id, periodo, status)
+            VALUES (?, ?, 'Aberto')
+        """, (self.funcionario.matricula, self.periodo))
+
+        # O Python captura o ID gerado e salva como atributo do objeto
+        self.id = cursor.lastrowid
+        conexao.commit()
+
+    def fechar_turno_banco(self, conexao):
+        conexao.execute("""
+        UPDATE turnos
+        SET status = 'Fechado'
+        WHERE id = ?                         
+        """, (self.id,))
+
+        conexao.commit()

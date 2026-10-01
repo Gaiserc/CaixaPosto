@@ -13,7 +13,7 @@ print(listar_funcionarios())
 
 
 while True:
-    matricula_escolhida = int(input("Digite a matricula do funcionario: "))
+    matricula_escolhida = int(input("Digite a matricula do funcionario: \n"))
     try:
         funcionario_dados = buscar_funcionario(matricula_escolhida)
 
@@ -23,44 +23,52 @@ while True:
             funcionario_dados[3],
         )
 
-        print(funcionario.nome)
-        print(funcionario.idade)
-        print(funcionario.matricula)
+        print(f"Nome: {funcionario.nome} | Idade: {funcionario.idade} | matricula: {funcionario.matricula} \n ")
         break
     except ValueError as erro:
         print(erro)
 
+# --- INÍCIO DA BUSCA DINÂMICA ---
+cursor = conexao.execute("""
+    SELECT bicos.id, combustiveis.nome, combustiveis.preco_atual 
+    FROM bicos 
+    JOIN combustiveis ON bicos.combustiveis_id = combustiveis.id
+""")
+dados_bicos = cursor.fetchall()
 
+bicos = {}
+busca = []
+texto_menu = "Quais bicos você vai trabalhar?\n"  # Texto dinâmico para o input
 
-# adicionando combustivel
-combustivel1 = Combustivel("Etanol", 4.78)
-combustivel2 = Combustivel("Aditivada", 6.69)
-combustivel3 = Combustivel("Gasolina", 6.57)
-combustivel4 = Combustivel("S500", 6.94)
-combustivel5 = Combustivel("S10", 6.99)
+for linha in dados_bicos:
+    bico_id = linha[0]
+    nome_combustivel = linha[1]
+    preco_combustivel = linha[2]
 
-# registrando bico
-bico1 = Bico(1, combustivel1)
-bico2 = Bico(2, combustivel2)
-bico3 = Bico(3, combustivel3)
+    combustivel_obj = Combustivel(nome_combustivel, preco_combustivel)
+    bico_obj = Bico(bico_id, combustivel_obj)
 
-# dicionario dos bicos
-bicos = {
-    1: bico1,
-    2: bico2,
-    3: bico3,
-}
+    bicos[bico_id] = bico_obj
+    busca.append(bico_id)
 
-# lista de bicos disponiveis para escolher
-busca = [1, 2, 3]
+    # Monta as opções do menu dinamicamente com base no banco
+    texto_menu += f" {bico_id} - Bico {bico_id} ({nome_combustivel})\n"
+
+texto_menu += "\nDigite os números dos bicos: "
+# --- FIM DA BUSCA DINÂMICA ---
+
+bicos_escolhidos = []
 
 bicos_escolhidos = []
 
 # criando o turno
 turno = Turno("Manhã", funcionario )
+turno.abrir_turno_banco(conexao)
+print(f"Turno aberto no banco com ID: {turno.id} \n")
 
 def iniciar_turno():
-    escolha = input(f"Quais bicos você vai trabalhar? \n 1 - Bico 1 (Etanol) \n 2 - Bico 2 (Aditivada) \n 3 - Bico 3 (Gasolina) \n \n Digite os números dos bicos: ")
+
+    escolha = input(texto_menu)
 
     escolhido = escolha.split(", ")
 
@@ -90,7 +98,8 @@ def iniciar_turno():
             encerrante,
             bico.combustivel.preco_atual,
             funcionario.matricula,
-            bico.combustivel.nome
+            bico.combustivel.nome,
+            turno.id
         )
 
         turno.add_registro_bico(registro)
@@ -110,3 +119,5 @@ iniciar_turno()
 turno.mostrar_registros()
 turno.resumo_turno()
 turno.resumo_financeiro()
+turno.fechar_turno_banco(conexao)
+print("Turno encerrado e salvo com sucesso no banco de dados!")
