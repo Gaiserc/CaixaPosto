@@ -89,35 +89,88 @@ def iniciar_turno():
 
                 encontrou = True
 
+
     for bico in bicos_escolhidos:
-        encerrante = int(
-            input(f"Digite o encerrante inicial do bico {bico.numero}: ")
-        )
-        registro = Registro_bico_turno(
+         while True:
+             try:
+                encerrante = int(
+                    input(f"Digite o encerrante inicial do bico {bico.numero}: ")
+                )
+                break
+             except ValueError:
+                print("Erro: Por favor, digite somente numeros inteiros")
+         registro = Registro_bico_turno(
             bico.numero,
             encerrante,
             bico.combustivel.preco_atual,
             funcionario.matricula,
             bico.combustivel.nome,
             turno.id
-        )
+                )
 
-        turno.add_registro_bico(registro)
+         turno.add_registro_bico(registro)
+    # No final da função, joga o turno para fora para o menu poder usar
+    return turno
 
-        encerrante_final = int(
-            input(f"Digite o encerrante final do bico {bico.numero}: ")
-        )
 
+def encerrar_turno(turno):
+
+    if turno is None:
+        print("\nErro: Não há nenhum turno aberto no momento!")
+        return None
+
+    print(f"\n--- ENCERRANDO O TURNO {turno.id} ---")
+
+    for registro in turno.registro_bicos:
+
+        while True:
+            try:
+                encerrante_final = int(
+                    input(f"Digite o encerrante final do bico {registro.numero_bico}:")
+                )
+                break
+            except ValueError:
+                print("Erro: Por favor, digite somente numeros inteiros")
+
+        # Salva a resposta na memória e no banco
         registro.registrar_encerrante_final(encerrante_final)
-
         # salva o registro completo no banco de dados
         registro.salvar_no_banco(conexao)
 
-iniciar_turno()
+    turno.fechar_turno_banco(conexao)
+    turno.resumo_financeiro()
+
+turno_atual = None
+
+while True:
+    print("\n --- - -- - CAIXA --- - - - - ")
+    print("1. Iniciar Turno")
+    print("2. Encerrar Turno")
+    print("3. Sair do Sistema")
+    opcao = input("Escolha: ")
+
+    if opcao == "1":
+        turno_atual = iniciar_turno()
+        print(f"\nTurno {turno_atual.id} iniciado com sucesso!")
+
+    elif opcao == "2":
+        print("Iniciando Encerramento")
+        encerrar_turno(turno_atual)
+        turno_atual = None
+        break
+    elif opcao == "3":
+        print("Saindo do Sistema")
+        break
+    else:
+        print("Opção invalida")
 
 
+"""
 turno.mostrar_registros()
 turno.resumo_turno()
-turno.resumo_financeiro()
-turno.fechar_turno_banco(conexao)
-print("Turno encerrado e salvo com sucesso no banco de dados!")
+
+
+print("Turno encerrado e salvo com sucesso no banco de dados!")"""
+
+
+
