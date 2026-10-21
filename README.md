@@ -1,7 +1,7 @@
 # Sistema de Gerenciamento de Caixa para Postos de Combustível
 
 ## O Problema e a Solução
-Durante a minha rotina como frentista, identifiquei um dificuldade: o fechamento financeiro dos caixas era confuso, manual e lento. Para solucionar essa dor real, desenvolvi este sistema em Python para organizar os turnos, registrar os bicos trabalhados e automatizar os cálculos financeiros no encerramento do expediente.
+Durante a minha rotina como frentista, o fechamento financeiro dos caixas era confuso, manual e lento. Para solucionar esse problema, desenvolvi este sistema em Python para organizar os turnos, registrar os bicos trabalhados e automatizar os cálculos financeiros no encerramento do expediente.
 
 ## Status do Projeto
 **Versão Atual:** Produto Mínimo Viável (MVP) concluído e funcional no terminal.
